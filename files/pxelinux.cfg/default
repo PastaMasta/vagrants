@@ -1,0 +1,25 @@
+DEFAULT menu.c32
+PROMPT 0
+TIMEOUT 300
+ONTIMEOUT localdisk
+MENU TITLE PXE Network Boot
+
+LABEL localdisk
+	MENU LABEL ^Local drive 0
+	MENU DEFAULT
+	LOCALBOOT 0
+
+LABEL installers
+	MENU LABEL ^Installers
+	KERNEL menu.c32
+	APPEND pxelinux.cfg/installers
+
+LABEL rescue
+	MENU LABEL ^Rescue boot
+	KERNEL menu.c32
+	APPEND pxelinux.cfg/rescue
+
+LABEL diagnostics
+	MENU LABEL ^Diagnostics
+	KERNEL menu.c32
+	APPEND pxelinux.cfg/diag

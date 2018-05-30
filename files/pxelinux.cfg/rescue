@@ -1,0 +1,6 @@
+MENU TITLE Rescue menu
+
+LABEL Main Menu
+     MENU LABEL ^Main Menu
+     Kernel menu.c32
+     APPEND pxelinux.cfg/default

@@ -1,0 +1,11 @@
+MENU TITLE Installation menu
+
+LABEL Main Menu
+     MENU LABEL ^Main Menu
+     Kernel menu.c32
+     APPEND pxelinux.cfg/default
+
+LABEL install_centos7
+    MENU LABEL ^CentOS 7 Install
+    KERNEL bootimages/installers/centos7/vmlinuz
+    APPEND ks=http://192.168.50.2/build/x86_64/CentOS_7.ks initrd=bootimages/installers/centos7/initrd.img ramdisk_size=100000
