@@ -7,5 +7,5 @@ LABEL Main Menu
 
 LABEL install_centos7
     MENU LABEL ^CentOS 7 Install
-    KERNEL bootimages/installers/centos7/vmlinuz
-    APPEND ks=http://192.168.50.2/build/x86_64/CentOS_7.ks initrd=bootimages/installers/centos7/initrd.img ramdisk_size=100000
+    KERNEL bootimages/installers/CentOS_7_x86_64/vmlinuz
+    APPEND ks=http://192.168.50.2/build/kickstarts/x86_64/CentOS_7.ks initrd=bootimages/installers/CentOS_7_x86_64/initrd.img ramdisk_size=100000
