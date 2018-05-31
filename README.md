@@ -1,9 +1,7 @@
-Rebuildatron
+Vagrants
 ======================
 
-This is a vagrant file and some scripts to setup a build / rescue server.
-
-Any iso files will be presented down to the VM and mounted under /var/www/html/os/${isovolumelabel}
+This is a collection of vagrantfiles for various tasks
 
 License and Authors
 -------------------
