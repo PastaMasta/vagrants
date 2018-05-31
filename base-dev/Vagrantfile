@@ -1,0 +1,51 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure('2') do |config|
+  config.vm.synced_folder '.', '/vagrant', disabled: true
+  config.vm.box = "centos/7"
+
+  config.vm.provider :libvirt do |libvirt|
+    libvirt.driver = "kvm"
+    libvirt.cpus = 8
+    libvirt.memory = 4098
+    libvirt.host = "localhost"
+    libvirt.connect_via_ssh = true
+    libvirt.username = "root"
+    libvirt.storage_pool_name = "local_big"
+  end
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.cpus = 4
+  end 
+
+  config.vm.network :public_network,
+      :dev => "internal",
+      :mode => "bridge",
+      :type => "bridge"
+
+  # Base client machine
+  config.vm.define "base" do |base|
+    base.vm.hostname = "base"
+    base.vm.provision "shell", path: "./scripts/firewall.sh"
+    base.vm.provision "shell", path: "./scripts/setup-chef.sh"
+  end
+
+  # Master
+  config.vm.define "master" do |master|
+    master.vm.hostname = "master"
+
+    master.vm.provider :libvirt do |libvirt|
+      libvirt.storage :file, :size => '50G', :type => 'qcow2'
+      libvirt.storage :file, :size => '50G', :type => 'qcow2'
+      libvirt.storage :file, :size => '50G', :type => 'qcow2'
+      libvirt.storage :file, :size => '50G', :type => 'qcow2'
+    end
+
+    master.vm.provision "shell", path: "./scripts/firewall.sh"
+    master.vm.provision "shell", path: "./scripts/zfs.sh"
+    master.vm.provision "shell", path: "./scripts/setup-chef.sh"
+  end
+
+end
+

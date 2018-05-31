@@ -1,0 +1,26 @@
+Testing plan
+=============
+
+1 Without the above
+2 With SELinux # fuck that
+3 With Firewalld
+4 With zfs
+
+Any client can:
+  Read http repo/ ### yes1 yes2 yes3
+
+Linux Client can:
+  Can mount /data/repo read-only ### yes1 yes2
+  Can mount /data/users and write to it as that user ### yes1 yes2
+  Can mount /data/virt/isos read-only when using kvm cookbook ### no1
+  Can mount /data/virt/central and write to it when using kvm cookbook ### no1
+
+  Can mount and write to /data/repo when in /root/chef-options/desktops ### yes1 yes2
+  Can mount and write to /data/docs when in /root/chef-options/desktops ### yes1 yes2
+
+Windows Client can:
+  Can read from //master/repo 
+
+  Can write to //master/repo when in /root/chef-options/desktops ### yes1 yes2
+  Can write to //master/docs/ when in /root/chef-options/desktops ### yes1 yes2
+  Can write to //master/backups/ when in /root/chef-options/backups ### yes1 yes2
