@@ -2,11 +2,9 @@
 
 echo "Setting up: `uname -n`"
 
-setenforce 0
-systemctl stop firewalld.service
-systemctl disable firewalld.service
-
+#
 # Just installs all the clients etc required for it to work
+#
 
 ###############################################################################
 # Ansible
@@ -28,6 +26,8 @@ ln -f -s /vagrant/chef/cookbooks /root/cookbooks
 
 ###############################################################################
 # Puppet
+
+
 
 ###############################################################################
 # Salt
