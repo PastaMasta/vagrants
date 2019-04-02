@@ -1,0 +1,24 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure('2') do |config|
+
+  config.vm.box = "centos/7"
+  config.vm.network :public_network
+  config.vm.synced_folder "files/", "/vagrant"
+  config.vm.provision "shell", path: "./scripts/setup.sh"
+
+  config.vm.define 'basic1' do |v|
+    v.vm.hostname = 'basic1'
+    install_script = File.join("./scripts/","#{v.vm.hostname}-setup.sh")
+    config.vm.provision "shell", path: install_script if File.exist?(install_script)
+  end
+
+  config.vm.define 'basic2' do |v|
+    v.vm.hostname = 'basic2'
+    install_script = File.join("./scripts/","#{v.vm.hostname}-setup.sh")
+    config.vm.provision "shell", path: install_script if File.exist?(install_script)
+  end
+
+end
+

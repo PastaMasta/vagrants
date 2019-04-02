@@ -1,0 +1,26 @@
+---
+- hosts: nodes
+  remote_user: vagrant
+  become: yes
+  tasks:
+    - name: Install httpd
+      yum:
+        name: httpd
+        state: latest
+    - name: Enable and start
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: Index files
+      template:
+        src: ./index.html.j2
+        dest: /var/www/html/index.html
+      notify:
+        - restart httpd
+  handlers:
+    - name: restart httpd
+      service:
+        name: httpd
+        state: restarted
