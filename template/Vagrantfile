@@ -17,10 +17,11 @@ Vagrant.configure('2') do |config|
   config.vm.provision "shell", path: "./scripts/global-setup.sh"
 
   1.times do |i|
-    node = "example#{i}"
+    node = "node#{i}"
     install_script = File.join("./scripts/","#{node}-setup.sh")
     config.vm.define node, autostart: false  do |v|
       v.vm.hostname = node
+      v.vm.provision "shell", path: "./scripts/node-global-setup.sh"
       v.vm.provision "shell", path: install_script if File.exist?(install_script)
     end
   end
