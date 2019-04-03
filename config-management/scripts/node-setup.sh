@@ -21,13 +21,27 @@ yum install -y https://packages.chef.io/files/stable/chef/14.11.21/el/7/chef-14.
 ln -f -s /vagrant/chef/cookbooks /root/cookbooks
 
 ###############################################################################
-# Cfengine
+# CFEngine
 
 
 ###############################################################################
 # Puppet
 
+# yum install -y https://yum.puppet.com/puppet6/puppet-release-el-7.noarch.rpm
+# yum install -y puppet-agent
+
+# /opt/puppetlabs/bin/puppet config set server puppet-master
+
+# systemctl start puppet.service
+# systemctl enable puppet.service
 
 
 ###############################################################################
 # Salt
+
+yum install -y https://repo.saltstack.com/yum/redhat/salt-repo-latest.el7.noarch.rpm 
+yum install -y salt-minion
+ln -f -s /vagrant/salt/minion /etc/salt/minion
+
+systemctl enable salt-minion.service
+systemctl start salt-minion.service
