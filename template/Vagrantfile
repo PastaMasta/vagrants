@@ -3,8 +3,6 @@ Vagrant.configure('2') do |config|
 
   config.vm.box = "centos/7"
   config.vm.synced_folder "files/", "/vagrant"
-  config.vm.provision "shell", path: "./scripts/ssh-key.sh"
-  config.vm.provision "shell", path: "./scripts/setup.sh"
   config.vm.network :public_network
 
   config.vm.provider "virtualbox" do |v|
@@ -12,18 +10,19 @@ Vagrant.configure('2') do |config|
     v.cpus = 4
   end
 
+  # My access key
+  config.vm.provision "shell", path: "./scripts/ssh-key.sh"
+
+  # Global setup script
   config.vm.provision "shell", path: "./scripts/setup.sh"
 
-  config.vm.define 'example1' do |v|
-    v.vm.hostname = 'example1'
-    install_script = File.join("./scripts/","#{v.vm.hostname}-setup.sh")
-    v.vm.provision "shell", path: install_script if File.exist?(install_script)
-  end
-
-  config.vm.define 'example2', autostart: false  do |v|
-    v.vm.hostname = 'example2'
-    install_script = File.join("./scripts/","#{v.vm.hostname}-setup.sh")
-    v.vm.provision "shell", path: install_script if File.exist?(install_script)
+  1.times do |i|
+    node = "example#{i}"
+    install_script = File.join("./scripts/","#{node}-setup.sh")
+    config.vm.define node, autostart: false  do |v|
+      v.vm.hostname = node
+      v.vm.provision "shell", path: install_script if File.exist?(install_script)
+    end
   end
 
 end

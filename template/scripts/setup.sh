@@ -1,3 +1,3 @@
 #! /bin/bash
 
-echo "Global setup script"
+echo "Global setup script! I am `uname -n`"
