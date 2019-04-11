@@ -1,0 +1,40 @@
+# -*- mode: ruby -*-
+Vagrant.configure('2') do |config|
+
+  config.vm.box = "centos/7"
+  config.vm.synced_folder "files/", "/vagrant"
+  config.vm.network :public_network
+
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 512
+    v.cpus = 4
+  end
+
+  # My access key
+  config.vm.provision "shell", path: "./scripts/ssh-key.sh"
+
+  # Global setup script
+  config.vm.provision "shell", path: "./scripts/global-setup.sh"
+
+  2.times do |i|
+    node = "node#{i}"
+    install_script = File.join("./scripts/","#{node}-setup.sh")
+    config.vm.define node, autostart: false  do |v|
+      v.vm.hostname = node
+      v.vm.provision "shell", path: "./scripts/node-global-setup.sh"
+      v.vm.provision "shell", path: install_script if File.exist?(install_script)
+    end
+  end
+
+  [ "nagios-master", "zabbix-master", "netdata-master" ].each do |mon|
+    config.vm.define mon, autostart: false do |v|
+      v.vm.hostname = mon
+      v.vm.provision "shell", path: "./scripts/#{mon}-setup.sh"
+      v.vm.provider "virtualbox" do |v|
+	v.memory = 2048
+	v.cpus = 4
+      end
+    end
+  end
+
+end

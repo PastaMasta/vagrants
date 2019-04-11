@@ -1,0 +1,3 @@
+#! /bin/bash
+
+echo 'ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA7BoUt4PG9EfsUtioluJk0Knl2LT4xHX8rjv24zYhrtVXMdoNRRBmPlcPcRPFZIIWOmmaXDRT1P1N9dvgekzVKfvTJVWwDBnRoi6FZGsfYBSiJnW8cTc0jof12M6Nl/RaeWvP64arT4L1t/90VYvXCXHi/aVmfWQ6S+RO0O8kpnLi6zVLcXxuzWXhIyVA4bO2ushHv7j2zoBF8tjRpmRHYkryxyd5maXBWtXaEYBDXOl1FdepZbL1puFzJFfqexPvCLJNGlUwmAwWVvL1gJj6EbAqye+AiALfXPTqE+MxvuTu6uDm1tgjSf+3VYm0C1K22ZNLIaKXj+khsZL6QPPPnQ==' >> ~vagrant/.ssh/authorized_keys
