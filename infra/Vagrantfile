@@ -2,12 +2,12 @@
 Vagrant.configure('2') do |config|
 
   config.vm.box = "centos/7"
-  config.vm.synced_folder "files/", "/vagrant"
+  config.vm.synced_folder "files/", "/vagrant", type: 'rsync'
   config.vm.network :public_network
 
   config.vm.provider "virtualbox" do |v|
     v.memory = 2048
-    v.cpus = 4
+    v.cpus = 2
   end
 
   # My access key
@@ -16,7 +16,10 @@ Vagrant.configure('2') do |config|
   # Global setup script
   config.vm.provision "shell", path: "./scripts/global-setup.sh"
 
-  [ "jenkins", "gitlab" ].each do |node|
+  #
+  # Generic machines:
+  #
+  [ "gitlab" ].each do |node|
     install_script = File.join("./scripts/","#{node}-setup.sh")
     config.vm.define node, autostart: false  do |v|
       v.vm.hostname = node
@@ -25,7 +28,19 @@ Vagrant.configure('2') do |config|
     end
   end
 
-  config.vm.define :rebuildatron do |m|
+  #
+  # Specific machines:
+  #
+
+  # Jenkins on fedora so we get latest ruby etc
+  config.vm.define 'jenkins', autostart: false  do |v|
+    v.vm.box = "generic/fedora29"
+    v.vm.hostname = 'jenkins'
+    v.vm.provision "shell", path: "./scripts/jenkins-setup.sh"
+  end
+
+  # Rebuild machine
+  config.vm.define :rebuildatron, autostart: false do |m|
     m.vm.hostname = "rebuildatron"
 
     m.vm.network "private_network", ip: "192.168.50.2"
