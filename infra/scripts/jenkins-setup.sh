@@ -8,16 +8,15 @@ curl --silent --location http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo | 
 rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
 yum install -y jenkins
 
+systemctl disable firewalld.service
+systemctl stop firewalld.service
+
 systemctl enable jenkins.service
 systemctl start jenkins.service
 
-yum install -y git
-
-sleep 5
-
 echo "JENKINS PASSWORD: admin:`cat /var/lib/jenkins/secrets/initialAdminPassword`"
 
-exit $?
+# Extra bits
+yum install -y git ruby ruby-devel automake gcc
+gem install rake rspec rubocop
 
-# Add to options in: /etc/sysconfig/jenkins
-#-Dhudson.model.ParametersAction.keepUndefinedParameters=true
