@@ -1,0 +1,42 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure('2') do |config|
+  config.vm.provider "virtualbox"
+  config.vm.box = "debian/bullseye64"
+  config.vm.synced_folder ".", "/vagrant", type: "rsync"
+
+  cpus = 8
+  memory = 4098
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.cpus = cpus
+    vb.memory = memory
+    vb.gui = true
+  end
+
+  # Internal webserver
+  config.vm.define "web" do |web|
+
+    web.vm.hostname = "web"
+    web.vm.network "private_network", virtualbox__intnet: true, ip: "192.168.50.101"
+
+    web.vm.provision "ansible" do |a|
+      a.playbook = "./ansible/web.yaml"
+    end
+  end
+
+  # VPN server
+  config.vm.define "vpn" do |vpn|
+
+    vpn.vm.hostname = "vpn"
+    vpn.vm.network "private_network", virtualbox__intnet: true, ip: "192.168.50.102"
+    vpn.vm.network "private_network", type: "dhcp"
+
+    vpn.vm.provision "ansible" do |a|
+      a.playbook = "./ansible/vpn.yaml"
+    end
+
+  end
+
+end

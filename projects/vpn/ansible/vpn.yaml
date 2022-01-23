@@ -1,0 +1,48 @@
+---
+- name: VPN server
+  become: yes
+  hosts: all
+  tasks:
+
+    - name: Installs the vpn server
+      package:
+        name:
+          - openvpn
+          - openssl
+        state: present
+
+    - name: Copy CA files
+      copy:
+        src: '{{item}}'
+        dest: '/etc/openvpn/'
+        owner: root
+        group: root
+        mode: 0644
+      loop:
+        - ../easy-rsa/pki/ca.crt
+        - ../easy-rsa/pki/dh.pem
+        - ../easy-rsa/pki/issued/openvpn-server.crt
+
+    - name: Run genkey
+      shell:
+        chdir: /etc/openvpn/
+        cmd: openvpn --genkey > ta.key
+        creates: /etc/openvpn/ta.key
+
+    - name: enable openvpn
+      service:
+        name: openvpn
+        enabled: yes
+        state: started
+
+          #  handlers:
+          #    - name: Restart openvpn
+          #      service:
+          #        name: openvpn
+          #        state: restarted
+          #
+          # install openvpn
+          # copy in config file
+          # Generate certs / etc ?
+          # fail2ban etc / country block - UK only
+          # HBF?
