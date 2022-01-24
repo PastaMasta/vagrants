@@ -17,10 +17,11 @@ set -x
 
 # openvpn-server
 ./EasyRSA-${Version}/easyrsa gen-req openvpn-server nopass
-./EasyRSA-${Version}/easyrsa sign-req client openvpn-server
+./EasyRSA-${Version}/easyrsa sign-req server openvpn-server
 
 # windows-client
 ./EasyRSA-${Version}/easyrsa gen-req windows-client nopass
 ./EasyRSA-${Version}/easyrsa sign-req client windows-client
 
 vagrant rsync vpn
+vagrant provision vpn
