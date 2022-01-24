@@ -1,17 +1,23 @@
 ---
-- name: VPN server
+- name: OpenVPN Server
   become: yes
   hosts: all
   tasks:
 
-    - name: Installs the vpn server
+    - name: Install packages
       package:
         name:
           - openvpn
           - openssl
         state: present
 
-    - name: Copy CA files
+    - name: Ip forwarding
+      sysctl:
+        name: net.ipv4.ip_forward
+        value: '1'
+        state: present
+
+    - name: Copy CA files and config
       copy:
         src: '{{item}}'
         dest: '/etc/openvpn/'
@@ -22,9 +28,10 @@
         - ../easy-rsa/pki/ca.crt
         - ../easy-rsa/pki/dh.pem
         - ../easy-rsa/pki/issued/openvpn-server.crt
-          # - ../server.conf
-       notify:
-         - Restart openvpn
+        - ../easy-rsa/pki/private/openvpn-server.key
+        - ../server.conf
+      notify:
+        - Restart openvpn
 
     - name: Run genkey
       shell:
@@ -34,18 +41,15 @@
 
     - name: enable openvpn
       service:
-        name: openvpn
+        name: openvpn@server
         enabled: yes
         state: started
+
+# fail2ban etc / country block - UK only
+# HBF?
 
   handlers:
     - name: Restart openvpn
       service:
-        name: openvpn
+        name: openvpn@server
         state: restarted
-
-          # install openvpn
-          # copy in config file
-          # Generate certs / etc ?
-          # fail2ban etc / country block - UK only
-          # HBF?
