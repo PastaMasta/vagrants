@@ -22,6 +22,9 @@
         - ../easy-rsa/pki/ca.crt
         - ../easy-rsa/pki/dh.pem
         - ../easy-rsa/pki/issued/openvpn-server.crt
+          # - ../server.conf
+       notify:
+         - Restart openvpn
 
     - name: Run genkey
       shell:
@@ -35,12 +38,12 @@
         enabled: yes
         state: started
 
-          #  handlers:
-          #    - name: Restart openvpn
-          #      service:
-          #        name: openvpn
-          #        state: restarted
-          #
+  handlers:
+    - name: Restart openvpn
+      service:
+        name: openvpn
+        state: restarted
+
           # install openvpn
           # copy in config file
           # Generate certs / etc ?
