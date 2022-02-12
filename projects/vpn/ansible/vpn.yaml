@@ -9,6 +9,7 @@
         name:
           - openvpn
           - openssl
+          - libpam-google-authenticator
         state: present
 
     - name: Ip forwarding
@@ -34,13 +35,24 @@
       notify:
         - Restart openvpn
 
-    - name: Run genkey
-      shell:
-        chdir: /etc/openvpn/
-        cmd: openvpn --genkey > ta.key
-        creates: /etc/openvpn/ta.key
+    # Google Authenticator setup
+    - name: google-auth dir
+      file:
+        path: /etc/google-auth
+        state: directory
+        owner: root
+        group: root
+        mode: '0740'
+    - name: Openvpn pam for google auth
+      copy:
+        src: ../openvpn.pam
+        dest: '/etc/pam.d/openvpn'
+        owner: root
+        group: root
+        mode: 0640
 
-    - name: enable openvpn
+    # Finally start all the services
+    - name: enable openvpn, fail2ban
       service:
         name: '{{item}}'
         enabled: yes
