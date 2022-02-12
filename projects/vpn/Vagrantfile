@@ -34,7 +34,7 @@ Vagrant.configure('2') do |config|
     vpn.vm.network "private_network", type: "dhcp"
 
     vpn.vm.provision "ansible" do |a|
-      a.playbook = "./ansible/vpn.yaml"
+      a.playbook = "#{ENV['HOME']}/ansible/ansible-openvpn/main.yaml"
     end
 
   end

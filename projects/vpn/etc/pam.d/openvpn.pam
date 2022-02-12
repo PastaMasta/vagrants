@@ -1,2 +1,0 @@
-auth    requisite       /lib/x86_64-linux-gnu/security/pam_google_authenticator.so secret=/etc/google-auth/${USER}  user=root
-account    required     pam_permit.so
