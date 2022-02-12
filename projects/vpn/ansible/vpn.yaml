@@ -31,7 +31,7 @@
         - ../easy-rsa/pki/issued/openvpn-server.crt
         - ../easy-rsa/pki/private/openvpn-server.key
         - ../easy-rsa/pki/ta.key
-        - ../server.conf
+        - ../etc/openvpn/server.conf
       notify:
         - Restart openvpn
 
@@ -45,7 +45,7 @@
         mode: '0740'
     - name: Openvpn pam for google auth
       copy:
-        src: ../openvpn.pam
+        src: ../etc/pam.d/openvpn.pam
         dest: '/etc/pam.d/openvpn'
         owner: root
         group: root
