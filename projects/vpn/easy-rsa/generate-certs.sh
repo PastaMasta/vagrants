@@ -18,10 +18,17 @@ set -x
 # openvpn-server
 ./EasyRSA-${Version}/easyrsa gen-req openvpn-server nopass
 ./EasyRSA-${Version}/easyrsa sign-req server openvpn-server
+openvpn --genkey > ./pki/ta.key
 
-# windows-client
-./EasyRSA-${Version}/easyrsa gen-req windows-client nopass
-./EasyRSA-${Version}/easyrsa sign-req client windows-client
+# Create client certs and .ovpn files
+clients="
+windows-client
+"
+for client in ${clients} ; do
+  ./EasyRSA-${Version}/easyrsa gen-req ${client} nopass
+  ./EasyRSA-${Version}/easyrsa sign-req client ${client}
+  # ./generate-client-config.sh ${client}
+done
 
 vagrant rsync vpn
 vagrant provision vpn

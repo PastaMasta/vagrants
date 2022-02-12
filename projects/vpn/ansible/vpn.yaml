@@ -17,18 +17,19 @@
         value: '1'
         state: present
 
-    - name: Copy CA files and config
+    - name: Copy OpenVPN files and PKI
       copy:
         src: '{{item}}'
         dest: '/etc/openvpn/'
         owner: root
         group: root
-        mode: 0644
+        mode: 0640
       loop:
         - ../easy-rsa/pki/ca.crt
         - ../easy-rsa/pki/dh.pem
         - ../easy-rsa/pki/issued/openvpn-server.crt
         - ../easy-rsa/pki/private/openvpn-server.key
+        - ../easy-rsa/pki/ta.key
         - ../server.conf
       notify:
         - Restart openvpn
@@ -41,12 +42,11 @@
 
     - name: enable openvpn
       service:
-        name: openvpn@server
+        name: '{{item}}'
         enabled: yes
         state: started
-
-# fail2ban etc / country block - UK only
-# HBF?
+      loop:
+        - openvpn@server
 
   handlers:
     - name: Restart openvpn
