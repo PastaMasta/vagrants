@@ -24,5 +24,9 @@ Vagrant.configure('2') do |config|
     swarm1.vm.hostname = "swarm1"
     swarm1.vm.provision "shell", path: "./setup.sh"
   end
+  config.vm.define "swarm2" do |swarm2|
+    swarm2.vm.hostname = "swarm2"
+    swarm2.vm.provision "shell", path: "./setup.sh"
+  end
 
 end
