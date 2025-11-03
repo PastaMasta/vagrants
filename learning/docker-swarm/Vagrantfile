@@ -1,0 +1,28 @@
+# -*- mode: ruby -*-
+
+Vagrant.configure('2') do |config|
+  config.vm.provider "virtualbox"
+
+  config.vm.synced_folder './', '/vagrant', type: "rsync", rsync__args: ["--verbose","--recursive","-K","--copy-links"], disabled: false
+
+  config.vm.box = "debian/bookworm64"
+  config.vm.provider "virtualbox" do |vb|
+    vb.cpus = 8
+    vb.memory = 4098
+    vb.gui = true
+  end
+
+  # Use system network bridge interface
+  bridge_host_interface_name = "Realtek PCIe 2.5GbE Family Controller"
+  config.vm.network "public_network", bridge: bridge_host_interface_name
+
+  config.vm.define "swarm0" do |swarm0|
+    swarm0.vm.hostname = "swarm0"
+    swarm0.vm.provision "shell", path: "./setup.sh"
+  end
+  config.vm.define "swarm1" do |swarm1|
+    swarm1.vm.hostname = "swarm1"
+    swarm1.vm.provision "shell", path: "./setup.sh"
+  end
+
+end
