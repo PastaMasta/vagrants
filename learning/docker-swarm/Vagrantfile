@@ -17,15 +17,15 @@ Vagrant.configure('2') do |config|
   config.vm.network "public_network", bridge: bridge_host_interface_name
 
   config.vm.define "swarm0" do |swarm0|
-    swarm0.vm.hostname = "swarm0"
+    swarm0.vm.hostname = "swarm0.localdomain"
     swarm0.vm.provision "shell", path: "./setup.sh"
   end
   config.vm.define "swarm1" do |swarm1|
-    swarm1.vm.hostname = "swarm1"
+    swarm1.vm.hostname = "swarm1.localdomain"
     swarm1.vm.provision "shell", path: "./setup.sh"
   end
   config.vm.define "swarm2" do |swarm2|
-    swarm2.vm.hostname = "swarm2"
+    swarm2.vm.hostname = "swarm2.localdomain"
     swarm2.vm.provision "shell", path: "./setup.sh"
   end
 
