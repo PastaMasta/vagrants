@@ -5,28 +5,30 @@ Vagrant.configure('2') do |config|
 
   config.vm.synced_folder './', '/vagrant', type: "rsync", rsync__args: ["--verbose","--recursive","-K","--copy-links"], disabled: false
 
-  config.vm.box = "debian/bookworm64"
+  config.vm.box = "ubuntu/jammy64"
   config.vm.provider "virtualbox" do |vb|
     vb.cpus = 8
     vb.memory = 4098
     vb.gui = true
+    vb.customize [ "modifyvm", :id, "--uartmode1", "disconnected" ]
   end
+
 
   # Use system network bridge interface
   bridge_host_interface_name = "Realtek PCIe 2.5GbE Family Controller"
   config.vm.network "public_network", bridge: bridge_host_interface_name
 
-  config.vm.define "swarm0" do |swarm0|
-    swarm0.vm.hostname = "swarm0.localdomain"
-    swarm0.vm.provision "shell", path: "./setup.sh"
+  config.vm.define "vswarm0" do |vswarm0|
+    vswarm0.vm.hostname = "vswarm0.localdomain"
+    vswarm0.vm.provision "shell", path: "./setup.sh"
   end
-  config.vm.define "swarm1" do |swarm1|
-    swarm1.vm.hostname = "swarm1.localdomain"
-    swarm1.vm.provision "shell", path: "./setup.sh"
+  config.vm.define "vswarm1" do |vswarm1|
+    vswarm1.vm.hostname = "vswarm1.localdomain"
+    vswarm1.vm.provision "shell", path: "./setup.sh"
   end
-  config.vm.define "swarm2" do |swarm2|
-    swarm2.vm.hostname = "swarm2.localdomain"
-    swarm2.vm.provision "shell", path: "./setup.sh"
+  config.vm.define "vswarm2" do |vswarm2|
+    vswarm2.vm.hostname = "vswarm2.localdomain"
+    vswarm2.vm.provision "shell", path: "./setup.sh"
   end
 
 end
