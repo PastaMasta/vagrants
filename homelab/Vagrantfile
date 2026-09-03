@@ -17,12 +17,7 @@ Vagrant.configure('2') do |config|
   config.vm.network "public_network", bridge: bridge_host_interface_name
 
   config.vm.provision "ansible" do |ansible|
-    # ansible.playbook = "vagrant-site-playbook.yaml"
-    ansible.playbook = "../../ansibles/playbooks/site.yaml"
-    # ansible.host_vars = {
-    #   "nas" = {
-    #   },
-    # }
+    ansible.playbook = "./ansible/vagrant.yaml"
     ansible.groups = {
       "nas" => ["nas"],
       "docker-nodes" => ["nas","node0","node1"],

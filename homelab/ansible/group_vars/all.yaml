@@ -1,0 +1,8 @@
+---
+local_groups:
+  - name: example
+    gid: 123450
+
+local_users:
+  - name: mee
+    uid: 1002
