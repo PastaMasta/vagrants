@@ -1,0 +1,40 @@
+# -*- mode: ruby -*-
+#
+Vagrant.configure('2') do |config|
+  config.vm.provider "virtualbox"
+
+  # config.vm.synced_folder './', '/vagrant', type: "rsync", rsync__args: ["--verbose","--recursive","-K","--copy-links"], disabled: false
+
+  config.vm.box = "generic/debian12"
+  config.vm.provider "virtualbox" do |vb|
+    vb.cpus = 8
+    vb.memory = 4098
+    vb.gui = true # Networking does not work without this????
+  end
+
+  # Use system network bridge interface
+  bridge_host_interface_name = "Realtek PCIe 2.5GbE Family Controller"
+  config.vm.network "public_network", bridge: bridge_host_interface_name
+
+  config.vm.provision "ansible" do |ansible|
+    # ansible.playbook = "vagrant-site-playbook.yaml"
+    ansible.playbook = "../../ansibles/playbooks/site.yaml"
+    # ansible.host_vars = {
+    #   "nas" = {
+    #   },
+    # }
+    ansible.groups = {
+      "nas" => ["nas"],
+      "docker-nodes" => ["nas","node0","node1"],
+    }
+  end
+
+  config.vm.define "nas" do |v|
+    v.vm.hostname = "nas.lab.localdomain"
+  end
+
+  config.vm.define "node0" do |v|
+    v.vm.hostname = "node0.lab.localdomain"
+  end
+
+end
