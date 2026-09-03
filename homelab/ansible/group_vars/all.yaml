@@ -1,7 +1,9 @@
 ---
 local_groups:
-  - name: example
-    gid: 123450
+  - name: backups
+    gid: 2001
+  - name: repo
+    gid: 2000
 
 local_users:
   - name: mee
