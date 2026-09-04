@@ -2,7 +2,7 @@
 [[ -n ${DEBUG} ]] && set -x
 
 echo "###################################"
-echo "setup-nas.sh"
+echo "setup-all.sh"
 echo "###################################"
 
-mkdir -p /data/repo
+apt update
