@@ -19,19 +19,24 @@ Vagrant.configure('2') do |config|
   config.vm.provision "ansible",after: :all do |ansible|
     ansible.playbook = "./ansible/vagrant.yaml"
     ansible.groups = {
-      "nas" => ["nas"],
-      "docker-nodes" => ["nas","node0","node1"],
+      "nas" => [
+        "nas.lab.localdomain"
+      ],
+      "docker-nodes" => [
+        "nas.lab.localdomain",
+        "node0.lab.localdomain",
+      ],
     }
   end
 
-  config.vm.provision "shell", path: "setup-all.sh"
+  config.vm.provision "setup-all", type: "shell", before: :all, path: "setup-all.sh"
 
-  config.vm.define "nas" do |v|
+  config.vm.define "nas.lab.localdomain" do |v|
     v.vm.hostname = "nas.lab.localdomain"
     v.vm.provision "shell", path: "setup-nas.sh"
   end
 
-  config.vm.define "node0" do |v|
+  config.vm.define "node0.lab.localdomain" do |v|
     v.vm.hostname = "node0.lab.localdomain"
   end
 
