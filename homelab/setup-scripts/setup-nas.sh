@@ -6,3 +6,4 @@ echo "setup-nas.sh"
 echo "###################################"
 
 mkdir -p /data/repo
+mkdir -p /data/virt/docker

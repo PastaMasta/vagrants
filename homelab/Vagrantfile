@@ -6,6 +6,7 @@ Vagrant.configure('2') do |config|
   # config.vm.synced_folder './', '/vagrant', type: "rsync", rsync__args: ["--verbose","--recursive","-K","--copy-links"], disabled: false
 
   config.vm.box = "generic/debian12"
+  config.vm.box_architecture = "amd64"
   config.vm.provider "virtualbox" do |vb|
     vb.cpus = 8
     vb.memory = 4098
@@ -23,21 +24,28 @@ Vagrant.configure('2') do |config|
         "nas.lab.localdomain"
       ],
       "docker-nodes" => [
-        "nas.lab.localdomain",
         "node0.lab.localdomain",
+        "node1.lab.localdomain",
+        "node2.lab.localdomain",
       ],
     }
   end
 
-  config.vm.provision "setup-all", type: "shell", before: :all, path: "setup-all.sh"
+  config.vm.provision "setup-all", type: "shell", before: :all, path: "./setup-scripts/setup-all.sh"
 
   config.vm.define "nas.lab.localdomain" do |v|
     v.vm.hostname = "nas.lab.localdomain"
-    v.vm.provision "shell", path: "setup-nas.sh"
+    v.vm.provision "shell", path: "./setup-scripts/setup-nas.sh"
   end
 
   config.vm.define "node0.lab.localdomain" do |v|
     v.vm.hostname = "node0.lab.localdomain"
+  end
+  config.vm.define "node1.lab.localdomain" do |v|
+    v.vm.hostname = "node1.lab.localdomain"
+  end
+  config.vm.define "node2.lab.localdomain" do |v|
+    v.vm.hostname = "node2.lab.localdomain"
   end
 
 end
