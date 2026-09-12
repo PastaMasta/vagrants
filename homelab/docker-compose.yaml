@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  httpd:
+    image: httpd:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - /etc/mailname:/etc/mailname:ro
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "<!DOCTYPE html>
+              <html>
+              <body>
+                <h1>Hello from: $(cat /etc/mailname) </h1>
+              </body>
+              </html>" > /usr/local/apache2/htdocs/index.html
+        exec httpd-foreground
